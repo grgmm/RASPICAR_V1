@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block PAGETITLE %}RASPICAR{% endblock %}
+
+{% block HEADTITLE %} ¡BIENVENIDOS A RASPICAR v1.1 !{% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background-image: url("/static/imagenes/Presentacion2.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+</style>
+<img src="{{ url_for('static', filename='imagenes/circulosmenu.png') }}" width="500" height="550" alt="Workplace" usemap="#workmap" style="display: block; margin-left: auto; margin-right: auto; margin:100px auto;" >
+<map name="workmap">
+  <area shape="circle" coords="250,95,44" alt="Módulos" href="{{url_for('Modulos')}}">
+  <area shape="circle" coords="357,270,44" alt="Gráficos" href="{{'//192.168.1.149:3000'}}">
+  <area shape="circle" coords="142,270,44" alt="Camara" href="{{url_for('Cam')}}" >
+  <area shape="circle" coords="250,460,44" alt="Salir" href="{{url_for('Salir')}}" >
+</map>
+{% endblock %}
+
+

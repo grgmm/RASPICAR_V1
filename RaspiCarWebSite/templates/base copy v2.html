@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+    {{ bootstrap.load_css() }}
+      <!-- Bootstrap CSS -->
+    
+    <title>{% block title %}{% endblock %} - My Webpage</title>
+    {% endblock %}
+</head>
+
+<body>
+  <style>
+    body {
+      background-image: url("/static/imagenes/Menu Principal v4.png");
+      background-repeat: no-repeat;
+    }
+    </style>
+    
+    {{ bootstrap.load_css() }}
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer"></div>
+    {% block footer %}
+    &copy; Copyright 2010 by <a href="http://GRGSYSTEMS.COM/">GRGSYSTEMS</a>.
+    {% endblock %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='base.css') }}">
+  </div>
+  {{ bootstrap.load_js() }}
+</body>
+</html>

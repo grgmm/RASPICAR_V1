@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}RASPICAR{% endblock %}
+
+{% block content %}
+<h2> Inicio: </h2>  
+<h4> Menú : </h4>
+  <ul> 
+    {% for item in menu %}
+    {%if item == 'MÓDULOS' %}
+    <a href="{{url_for('Modulos')}}" </a>  <li> {{item}}  </li>
+      <link rel="shortcut icon" href="{{ url_for('static', filename='imagenes/modulos.jpg')}}"> 
+      <img src="{{ url_for('static', filename='imagenes/modulos.jpg') }}" width="150" height="60" /> 
+    {% endif %}
+
+      {%if item == 'GRÁFICOS' %}
+      <a href="{{'//192.168.1.149:3000'}}" </a>  <li> {{item}} </li>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='imagenes/graficosx.jpg')}}"> 
+        <img src="{{ url_for('static', filename='imagenes/graficosx.jpg') }}" width="150" height="60" /> 
+      {% endif %}
+
+      
+      {%if item == 'CAMARA(5min)' %}
+      <a href="{{url_for('Cam')}}" </a>  <li> {{item}} </li>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='imagenes/cam.jfif')}}"> 
+        <img src="{{ url_for('static', filename='imagenes/cam.jfif') }}" width="150" height="60" /> 
+      {% endif %}
+
+      
+      {%if item == 'SALIR' %}
+      <a href="{{url_for('Salir')}}" </a>  <li> {{item}}  </li>
+        <link rel="shortcut icon" href="{{ url_for('static', filename='imagenes/exit.png')}}"> 
+        <img src="{{ url_for('static', filename='imagenes/exit.png') }}" width="150" height="60" /> 
+      {% endif %}
+    
+    {% endfor %}
+  </ul>
+{% endblock %}

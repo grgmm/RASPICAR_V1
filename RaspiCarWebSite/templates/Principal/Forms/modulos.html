@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block PAGETITLE %}MODULOS.{% endblock %}
+
+{% block HEADTITLE %} MÓDULOS DEL SISTEMA {% endblock %}
+{% from 'bootstrap5/form.html' import render_form_row %}
+
+
+
+{% block content %}
+<style>
+  body {
+    background-image: url("/static/imagenes/Presentacion2.png");
+    background-size: cover;
+    background-attachment: fixed;
+  }
+</style>
+
+
+<form method="post" >
+  {{ form.csrf_token() }}
+  <h2> {{render_form_row([form.Camera_Auto])}} </h2>
+  <h2>{{ render_form_row([form.OBD2_AUTO])}}</h2>
+  <h2>{{ render_form_row([form.Integridad_Raspi])}}</h2>
+  <h2>{{ render_form_row([form.GestionBD])}} </h2>
+  <h2>{{ render_form_row([form.SALIR])}} </h2>
+  <button button class="button" input type="submit" value=form.submit>{{form.submit.label}} </button>
+
+</form>
+{% endblock%}
+
+  
+
+
+
+
+
+
+

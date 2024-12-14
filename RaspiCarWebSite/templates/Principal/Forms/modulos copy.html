@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Módulos{% endblock %}
+{% block content %}
+<h2> Selección de Módulos: </h2>
+   <form method="POST" action="/Modulos">
+      <style>
+         table, th, td {
+           border:1px solid black;
+           border-collapse: collapse;
+         }
+         </style>
+         <table style="width:50%">
+            <tr style="width:10px">
+             <th>APLICACIÓN</td>
+             <th>ACTIVAR</td>
+           </tr>
+            <tr>
+               <td><img src="{{ url_for('static', filename='imagenes/obdclick.png') }}" width="150" height="60" /> {{ form.OBD2_AUTO.label }} </td>
+               <td> {{ form.OBD2_AUTO() }} </td>
+            </tr>
+            <tr>
+               <td><img src="{{ url_for('static', filename='imagenes/obd.png') }}" width="150" height="60" /> {{ form.OBD2_P4.label }}  </td>
+               <td> {{ form.OBD2_P4()}}</td>
+            </tr>
+            <tr>
+               <td><img src="{{ url_for('static', filename='imagenes/raspberry_pi.png') }}" width="150" height="60" />{{ form.Integridad_Raspi.label }}  </td>
+               <td> {{form.Integridad_Raspi()}}</td>
+            </tr>
+            <tr>
+               <td><img src="{{ url_for('static', filename='imagenes/Base-de-Datos.jpg') }}" width="150" height="60" /> {{ form.GestionBD.label }} </td>
+               <td> {{ form.GestionBD()}} 
+            </tr>
+            {{  form.submit() }} 
+         </table>
+     
+   </form>
+  {% endblock %}

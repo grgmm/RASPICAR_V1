@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+{% block PAGETITLE %} SALIR {% endblock %}
+{% block HEADTITLE %} DETENIENDO RASPICAR REGRESA PRONTO {% endblock %}
+
+{% block content %}
+<style>
+  body {
+    background-image: url("/static/imagenes/Presentacion2.png");
+    background-size: cover;
+    background-attachment: fixed;
+  }
+</style>
+
+      <center> <button type="button" class="button" onclick="window.location.href='http://127.0.0.1:5000/'">INICIO </button> </center>
+  {% endblock %}
