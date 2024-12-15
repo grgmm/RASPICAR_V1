@@ -13,12 +13,9 @@ bStartAcqRaspi= True
 bStartOBD_P4 = False
 fcoolanttemp=0
 def fgestionBD():
-        
-
-        
-        if (r.get('SALIR')) == b'True' or (r.get('SALIR_BD'))== b'True':
+        '''if (r.get('SALIR')) == b'True' or (r.get('SALIR_BD'))== b'True':
                 logging.info('DB-I01: SALIENDO DE GESTION DE BASE DE DATOS')
-                exit()
+                exit()'''
         #bStartOBD_P4 = bStartOBD_P4 = Data_Flags['OBD2_P4']
         #bStartAcqRaspi= Data_Flags['Integridad_Raspi']
         #bStartOBD = Data_Flags['OBD2_AUTO']
@@ -29,24 +26,25 @@ def fgestionBD():
         Values2=""
         ValuesTemp2=Values2
         #if bStartAcqRaspi:
+        #if r.get('SALIR_RASPI')==b'False' or (r.get('SALIR_BD'))== b'False':
         if r.get('SALIR_RASPI')==b'False':
-                        try:
-                                db=psycopg2.connect(database="obd2mm", user="morenomx", password="Mm262517")
-                                while db:
-                                        #TempCPU=DataRaspi['raspi']['TempCPU']
+                try:
+                        db=psycopg2.connect(database="obd2mm", user="morenomx", password="Mm262517")
+                        while db:
+                                if (r.get('SALIR')) == b'True' or (r.get('SALIR_BD'))== b'True':
+                                        logging.info('DB-I05: SALIENDO DE GESTION DE BASE DE DATOS')
+                                        exit()
+                                else:
+                                        print(r.get('SALIR_BD')==b'False')
+                                        #logging.warning('lolo2 '+ str(r.get('SALIR_BD')))
                                         TempCPU=r.get('TempCPU')
                                         TempCPU=float(TempCPU.decode('utf-8'))
-                                        #print(TempCPU, type(TempCPU))
-                                        #TempGPU=DataRaspi['raspi']['TempGPU']
                                         TempGPU=r.get('TempGPU')
                                         TempGPU=float(TempGPU.decode('utf-8'))
-                                        #UsedHDD=DataRaspi['raspi']['UsedHDD']
                                         UsedHDD=r.get('UsedHDD')
                                         UsedHDD=float(UsedHDD.decode('utf-8'))
-                                        #FreeHDD= DataRaspi['raspi']['FreeHDD']
                                         FreeHDD=r.get('FreeHDD')
                                         FreeHDD=float(FreeHDD.decode('utf-8'))
-                                        #PercentHDD=DataRaspi['raspi']['PercentHDD']
                                         PercentHDD=r.get('PercentHDD')
                                         PercentHDD=float(PercentHDD.decode('utf-8'))
                                         cursor= db.cursor()
@@ -54,39 +52,30 @@ def fgestionBD():
                                         sql="insert into raspi(tempcpu, tempgpu, usedhdd, freehdd, percenthdd, timestamp) values (%s,%s,%s,%s,%s,%s)"
                                         datos=(TempCPU,TempGPU, UsedHDD, FreeHDD, PercentHDD,  timestamp)
                                         Values=(TempCPU, TempGPU, UsedHDD, FreeHDD, PercentHDD)
-                                        #print(Values)
-                                        #cursor.execute("SELECT * FROM raspi ORDER BY timestamp LIMIT 1")
-                                        #lastrow = cursor.fetchone()
-                                        #print(lastrow)
-                                        #column_names = [desc[0] for desc in cursor.description]
-                                        #print(column_names)
-                                        #lastregister= dict(zip(column_names,lastrow))
-                                        #lastregister=lastregister.pop('jdata')
-                                        #print(lastregister['raspi'])
                                         time.sleep(2)
                                         if (Values != ValuesTemp):
                                                 cursor.execute(sql, datos)
                                                 time.sleep(5)
                                                 ValuesTemp=Values
                                                 if bStartRASPI_DEBUGGER:
-                                                         logging.info(datos)
+                                                        logging.info(datos)
                                                 try:
                                                         db.commit() 
                                                         logging.info('DB-I01: ALMACENANDO EN BD '+ 
-                                                        'TempCPU=' +str(TempCPU)+' '
-                                                        + 'TempGPU='+str(TempGPU)+' '
-                                                        + 'UsedHDD='+str(UsedHDD)+' '
-                                                        + 'FreeHDD='+str(FreeHDD)  +' '
-                                                        + 'PercentHDD='+str(PercentHDD)
+                                                                        'TempCPU=' +str(TempCPU)+' '
+                                                                        + 'TempGPU='+str(TempGPU)+' '
+                                                                        + 'UsedHDD='+str(UsedHDD)+' '
+                                                                        + 'FreeHDD='+str(FreeHDD)  +' '
+                                                                        + 'PercentHDD='+str(PercentHDD)
                                                         )
-                                                        #db.close()
-                                                
                                                 except Exception as e:
                                                         logging.warning('DB-W01: Error Conectando con BD'+ str(e))
                                         else:
                                                 logging.info('DB-I02: Data repetida No se almacema en BD')
-                        except Exception as e:
-                                logging.warning('DB-W02: Error Conectando con BD'+ str(e))
+                        
+                        
+                except Exception as e:
+                        logging.warning('DB-W02: Error Conectando con BD'+ str(e))
         #if bStartOBD:
         if r.get('SALIR_OBDAUTO')==b'False':
                 '''fcoolanttemp=0
@@ -97,59 +86,59 @@ def fgestionBD():
                 try:
                         db1=psycopg2.connect(database="obd2mm", user="morenomx", password="Mm262517")
                         while db1:
-                                try: 
-                                        time.sleep(5)
-                                       
-                                        keys = r.keys('*')
-                                        #for key in keys: 
-                                                #value = r.get(key) 
-                                                #print(f'{key}:')
-                                        if (b'COOLANT_TEMP') in keys:
-                                                scoolanttemp=r.get('COOLANT_TEMP')
-                                                fcoolanttemps=([float(s) for s in re.findall(r"-?\d+\.?\d*", str(scoolanttemp))]) # Obtiene en una lista los numeros presentes en una cadena
-                                                fcoolanttemp=fcoolanttemps[0]
+                                if (r.get('SALIR')) == b'True' or (r.get('SALIR_BD'))== b'True':
+                                        logging.info('DB-I05: SALIENDO DE GESTION DE BASE DE DATOS')
+                                        exit()
+                                else:
+                                        try: 
+                                                time.sleep(5)
+                                                keys = r.keys('*')
+                                                #for key in keys: 
+                                                        #value = r.get(key) 
+                                                        #print(f'{key}:')
+                                                if (b'COOLANT_TEMP') in keys:
+                                                        scoolanttemp=r.get('COOLANT_TEMP')
+                                                        fcoolanttemps=([float(s) for s in re.findall(r"-?\d+\.?\d*", str(scoolanttemp))]) # Obtiene en una lista los numeros presentes en una cadena
+                                                        fcoolanttemp=fcoolanttemps[0]
+
+                                                if (b'RUN_TIME') in keys:
+                                                        sruntime=r.get('RUN_TIME')
+                                                        fruntimes=([float(s) for s in re.findall(r"-?\d+\.?\d*", str(sruntime))])
+                                                        fruntime=fruntimes[0]
+
+                                                if (b'INTAKE_PRESSURE') in keys:
+                                                        sintakepressure=r.get('INTAKE_PRESSURE')
+                                                        fintakepressures=([float(s) for s in re.findall(r"-?\d+\.?\d*", str(sintakepressure))])
+                                                        fintakepressure=fintakepressures[0]
+
+                                                if (b'DISTANCE_SINCE_DTC_CLEAR') in keys:
+                                                        sdistancesincedtcclear=r.get('DISTANCE_SINCE_DTC_CLEAR')
+                                                        fdistancesincedtcclears=([float(s) for s in re.findall(r"-?\d+\.?\d*", str(sdistancesincedtcclear))])
+                                                        fdistancesincedtcclear=fdistancesincedtcclears[0]
                                                 
-
-                                        if (b'RUN_TIME') in keys:
-                                                sruntime=r.get('RUN_TIME')
-                                                fruntimes=([float(s) for s in re.findall(r"-?\d+\.?\d*", str(sruntime))])
-                                                fruntime=fruntimes[0]
-
-                                        if (b'INTAKE_PRESSURE') in keys:
-                                                sintakepressure=r.get('INTAKE_PRESSURE')
-                                                fintakepressures=([float(s) for s in re.findall(r"-?\d+\.?\d*", str(sintakepressure))])
-                                                fintakepressure=fintakepressures[0]
-                                                
-
-                                        if (b'DISTANCE_SINCE_DTC_CLEAR') in keys:
-                                                sdistancesincedtcclear=r.get('DISTANCE_SINCE_DTC_CLEAR')
-                                                fdistancesincedtcclears=([float(s) for s in re.findall(r"-?\d+\.?\d*", str(sdistancesincedtcclear))])
-                                                fdistancesincedtcclear=fdistancesincedtcclears[0]
-                                        
-                                        if (b'DISTANCE_SINCE_DTC_CLEAR') in keys:
-                                                srpm=r.get('RPM')
-                                                frpms=([float(s) for s in re.findall(r"-?\d+\.?\d*", str(srpm))])
-                                                frpm=frpms[0]
-
-                                        cursor1= db1.cursor()
-                                        timestamp1 = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  
-                                        Values1=(fcoolanttemp, fruntime, fintakepressure, fdistancesincedtcclear, frpm )
-                                        sql1 = "INSERT INTO mode01(coolanttemp, runtime, intakepressure, distancesincedtcclear, rpm, timestamp) VALUES (%s,%s,%s,%s,%s,%s)"
-                                        datos1 =(fcoolanttemp, fruntime, fintakepressure, fdistancesincedtcclear, frpm, timestamp1)
-                                        if (Values1 != ValuesTemp1):
-                                                #print('almacenando en BD..............')
-                                                cursor1.execute(sql1,datos1)
-                                                time.sleep(2)
-                                                ValuesTemp1=Values1
-                                                try:
-                                                        db1.commit()
-                                                        logging.info('DB-I03: Almacenando en BD')
-                                                except Exception as e:
-                                                        logging.warning('DB-W03: '+ str(e))
-                                        else:
-                                                logging.info('DB-I04: Data repetida No se almacema en BD')
-                                except Exception as e: 
-                                        logging.warning('DB-W05: '+ str(e))
+                                                if (b'DISTANCE_SINCE_DTC_CLEAR') in keys:
+                                                        srpm=r.get('RPM')
+                                                        frpms=([float(s) for s in re.findall(r"-?\d+\.?\d*", str(srpm))])
+                                                        frpm=frpms[0]
+                                                cursor1= db1.cursor()
+                                                timestamp1 = datetime.now().strftime('%Y-%m-%d %H:%M:%S')  
+                                                Values1=(fcoolanttemp, fruntime, fintakepressure, fdistancesincedtcclear, frpm )
+                                                sql1 = "INSERT INTO mode01(coolanttemp, runtime, intakepressure, distancesincedtcclear, rpm, timestamp) VALUES (%s,%s,%s,%s,%s,%s)"
+                                                datos1 =(fcoolanttemp, fruntime, fintakepressure, fdistancesincedtcclear, frpm, timestamp1)
+                                                if (Values1 != ValuesTemp1):
+                                                        #print('almacenando en BD..............')
+                                                        cursor1.execute(sql1,datos1)
+                                                        time.sleep(2)
+                                                        ValuesTemp1=Values1
+                                                        try:
+                                                                db1.commit()
+                                                                logging.info('DB-I03: Almacenando en BD')
+                                                        except Exception as e:
+                                                                logging.warning('DB-W03: '+ str(e))
+                                                else:
+                                                        logging.info('DB-I04: Data repetida No se almacema en BD')
+                                        except Exception as e: 
+                                                logging.warning('DB-W05: '+ str(e))
                 except Exception as e:
                         logging.warning('DB-W06: Error Conectando con BD ' + str(e))
         

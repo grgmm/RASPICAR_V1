@@ -63,6 +63,7 @@ def Modulos():
         global ht_obdauto
         ht_obdauto = threading.Thread(target=t_obdauto)
         if Flags_Data['OBD2_AUTO']:
+            logger.info('app-I05: INICIANDO MÓDULO OBD AUTO')
             r.mset({"SALIR":"False", "SALIR_OBDAUTO":"False"})
             activar_obdauto = True
             ht_obdauto.start()
@@ -78,6 +79,7 @@ def Modulos():
         global ht_raspi
         ht_raspi = threading.Thread(target=t_raspi)
         if Flags_Data['Integridad_Raspi']:
+            logger.info('app-I06: INICIANDO MÓDULO INTEGRIDAD RASPI')
             r.mset({"SALIR":"False", "SALIR_RASPI":"False"})
             activar_raspi = True
             ht_raspi.start()
@@ -102,7 +104,6 @@ def Modulos():
             else:
                 GestionBD_run= False
         else:
-            Salir_Data['SALIR_BD']=True
             r.set('SALIR_BD', 'True')
             ht_GestionBD.activar = False
             if ht_GestionBD.is_alive():
@@ -115,6 +116,7 @@ def Modulos():
         global ht_cam_auto
         ht_cam_auto = threading.Thread(target=t_cam_auto)
         if Flags_Data['Camera_Auto']:
+            logger.info('app-I04: INICIANDO MÓDULO CAMARA AUTO')
             r.mset({'SALIR':'False', 'SALIR_CAMARA_AUTO':'False'})
             activar_cam_auto = True
             ht_cam_auto.start()
