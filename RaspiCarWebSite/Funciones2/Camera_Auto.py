@@ -14,7 +14,6 @@ def CameraAuto(lolo, lo, hi):
         #Camara_Disponible=False
     #else:
     if r.get('Camera_Activa') == b'False':
-        print('PASO')
         Camara_Disponible=True
         camera=picamera.PiCamera(resolution=(1024, 768), framerate=24)
         pygame.init()
@@ -23,26 +22,30 @@ def CameraAuto(lolo, lo, hi):
                 if camera.previewing:  
                     camera.stop_preview()
                     camera.close()
-                    logging.warning('camera_auto-W10: DESACTIVANDO CAMARA' )
+                    logging.info('camera_auto-I10: DESACTIVANDO CAMARA' )
                 r.set('Camera_Activa', 'False')
-                logging.warning('camera_auto-W11: SALIENDO DE CAMARA AUTO' )
+                logging.info('camera_auto-I11: SALIENDO DE CAMARA AUTO' )
                 time.sleep(1)
                 exit()
-            distancenormalizada=100
+            distancenormalizada=85
             iteraint=0
             iteracion=0
             cerrar=10
             CamaraOffTime =10
-            CerrarIteraciones=15
-            UltimaIteracion=20
+            CerrarIteraciones=30
             try:
                 distanceCmx =  proximidad()[0]
                 sensor_when_out_of_range=proximidad()[1]
             except ValueError as er:
-                logging.warning('camera_auto-W01: '+ er )
+                logging.warning('camera_auto-W01: '+ str(er) )
             #if (distanceCmx < 100 and Camara_Disponible):
             if (distanceCmx < 100):
                 while iteraint < cerrar:
+                    try:
+                        distanceCmx =  proximidad()[0]
+                        sensor_when_out_of_range=proximidad()[1]
+                    except ValueError as er:
+                        logging.warning('camera_auto-W02: '+ str(er) )
                     iteracion+=1
                     if not camera.previewing:
                         camera.start_preview()
@@ -53,7 +56,7 @@ def CameraAuto(lolo, lo, hi):
                             iteraint=0
                             CamaraOffTime=10
                         if distanceCmx >= hi:
-                            logging.warning('camera_auto-W02: ' + str(distanceCmx))
+                            logging.info('camera_auto-i02: ' + str(distanceCmx))
                         if (distanceCmx < hi ) and (distanceCmx >= lo ):
                             logging.warning('camera_auto-W03, sensor: ' + str(distanceCmx))
                             pygame.mixer.music.load(path()['p_media']+"p1.wav")
@@ -83,7 +86,6 @@ def CameraAuto(lolo, lo, hi):
                                 camera.annotate_background = picamera.Color('black')      
                                 camera.annotate_text = 'CERRANDO CAMARA EN '+ str(CamaraOffTime)+' Seg'
                             if CamaraOffTime<=0:
-                                #if iteraint >= cerrar or iteracion >= UltimaIteracion:
                                 distanceCmx= distancenormalizada
                                 iteraint=cerrar + 1 # Para cerrar el ciclo en la proxima iteracion
                                 logging.warning('camera_auto-W09: DESACTIVANDO CAMARA' )
@@ -95,7 +97,7 @@ def CameraAuto(lolo, lo, hi):
                                         #camera.close()
                             time.sleep(1)
             time.sleep(1)
-    logging.warning('camera_auto-W12: SALIENDO DE CAMARA AUTO, RECURSO NO DISPONIBLE' )
+    logging.warning('camera_auto-I12: SALIENDO DE CAMARA AUTO, RECURSO NO DISPONIBLE' )
 CameraAuto(lolo=25, lo=65, hi=70)
  
     

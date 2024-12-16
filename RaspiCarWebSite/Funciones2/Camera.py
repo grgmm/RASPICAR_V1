@@ -9,7 +9,7 @@ r = redis.Redis(host='127.0.0.1', port=6379, db=1)
 logging.basicConfig(level = logging.DEBUG, format= '%(asctime)s - %(name)s - %(levelname)s - %(message)s' ,filename=path()['p_data']+'camera_manual.log',filemode='a')
 def camera(lolo, lo, hi):
     pygame.init()
-    distancenormalizada=100
+    distancenormalizada=85
     iteraint=0
     iteracion=0
     cerrar=10
@@ -34,7 +34,7 @@ def camera(lolo, lo, hi):
                         distanceCmx =  proximidad()[0]
                         logging.info('camera-I01: ' + str(distanceCmx))
                     except Exception as er:
-                        logging.warning('camera-W01: '+ er)
+                        logging.warning('camera-W01: '+ str(er))
                     sensor_when_out_of_range=proximidad()[1]
                     if (distanceCmx < distancenormalizada):
                         if (iteracion < CerrarIteraciones):
