@@ -9,7 +9,7 @@ r = redis.Redis(host='127.0.0.1', port=6379, db=1)
 logging.basicConfig(level = logging.DEBUG, format= '%(asctime)s - %(name)s - %(levelname)s - %(message)s' ,filename=path()['p_data']+'camera_manual.log',filemode='a')
 def camera(lolo, lo, hi):
     pygame.init()
-    distancenormalizada=85
+    distancenormalizada=100
     iteraint=0
     iteracion=0
     cerrar=10

@@ -57,7 +57,6 @@ def Salir():
 def Modulos():
     form = Modulos_form()
     if form.validate_on_submit():
-        #print(form.data)
         Flags_Data=form.data
 ################## OBD COCHES NUEVOS(Mode 01 PROTOCOLO: AUTO SELECCION) #######################
         global ht_obdauto

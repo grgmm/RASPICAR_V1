@@ -27,19 +27,19 @@ def CameraAuto(lolo, lo, hi):
                 logging.info('camera_auto-I11: SALIENDO DE CAMARA AUTO' )
                 time.sleep(1)
                 exit()
-            distancenormalizada=85
+            distancenormalizada=100
             iteraint=0
             iteracion=0
             cerrar=10
-            CamaraOffTime =10
-            CerrarIteraciones=30
+            CamaraOffTime = 10
+            CerrarIteraciones=15
             try:
                 distanceCmx =  proximidad()[0]
                 sensor_when_out_of_range=proximidad()[1]
             except ValueError as er:
                 logging.warning('camera_auto-W01: '+ str(er) )
             #if (distanceCmx < 100 and Camara_Disponible):
-            if (distanceCmx < 100):
+            if (distanceCmx < distancenormalizada):
                 while iteraint < cerrar:
                     try:
                         distanceCmx =  proximidad()[0]
@@ -78,26 +78,25 @@ def CameraAuto(lolo, lo, hi):
                             camera.annotate_text = str(distanceCmx) +' Cm'
                         else:
                             camera.annotate_text = str(distanceCmx) +' Cm'
-                        if distanceCmx >= distancenormalizada or  sensor_when_out_of_range or iteracion >= CerrarIteraciones:
-                            iteraint+=1
-                            CamaraOffTime-=1
-                            if not camera.previewing:
-                                camera.start_preview()
-                                camera.annotate_background = picamera.Color('black')      
-                                camera.annotate_text = 'CERRANDO CAMARA EN '+ str(CamaraOffTime)+' Seg'
-                            if CamaraOffTime<=0:
-                                distanceCmx= distancenormalizada
-                                iteraint=cerrar + 1 # Para cerrar el ciclo en la proxima iteracion
-                                logging.warning('camera_auto-W09: DESACTIVANDO CAMARA' )
-                                camera.annotate_text = 'CERRANDO CAMARA EN '+ str('CamaraOffTime')+' Seg'
-                                if   camera.previewing:  
-                                    camera.stop_preview()
-                                    r.set('Camera_Activa', 'False')
-                                time.sleep(3)
-                                        #camera.close()
-                            time.sleep(1)
+                    if distanceCmx >= distancenormalizada or  sensor_when_out_of_range or iteracion >= CerrarIteraciones:
+                        iteraint+=1
+                        CamaraOffTime-=1
+                        if camera.previewing:
+                            camera.annotate_background = picamera.Color('black')      
+                            camera.annotate_text = 'CERRANDO CAMARA EN '+ str(CamaraOffTime)+' Seg'
+                        if CamaraOffTime<=0:
+                            #distanceCmx= distancenormalizada
+                            iteraint=cerrar + 1 # Para cerrar el ciclo en la proxima iteracion
+                            logging.warning('camera_auto-W09: DESACTIVANDO CAMARA' )
+                            camera.annotate_text = 'CERRANDO CAMARA EN '+ str(CamaraOffTime)+' Seg'
+                            if   camera.previewing:  
+                                camera.stop_preview()
+                                r.set('Camera_Activa', 'False')
+                            time.sleep(3)
+                        time.sleep(1)
             time.sleep(1)
-    logging.warning('camera_auto-I12: SALIENDO DE CAMARA AUTO, RECURSO NO DISPONIBLE' )
+    else:
+        logging.warning('camera_auto-I12: SALIENDO DE CAMARA AUTO, RECURSO NO DISPONIBLE' )
 CameraAuto(lolo=25, lo=65, hi=70)
  
     
